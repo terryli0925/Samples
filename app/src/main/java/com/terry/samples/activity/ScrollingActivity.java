@@ -1,6 +1,5 @@
 package com.terry.samples.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,19 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.terry.samples.R;
+import com.terry.samples.adapter.StringAdapter;
 
 import java.util.ArrayList;
 
 public class ScrollingActivity extends AppCompatActivity {
     private ArrayList<String> testItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
-    private ItemAdapter mItemAdapter;
+    private StringAdapter mStringAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,45 +58,8 @@ public class ScrollingActivity extends AppCompatActivity {
             testItems.add(Integer.toString(i));
         }
 
-        mItemAdapter = new ItemAdapter(this, testItems);
-        mRecyclerView.setAdapter(mItemAdapter);
+        mStringAdapter = new StringAdapter(this, testItems);
+        mRecyclerView.setAdapter(mStringAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
-        private ArrayList<String> testItems;
-        private LayoutInflater inflater;
-        private Context context;
-
-        public ItemAdapter(Context context, ArrayList<String> items) {
-            this.context = context;
-            this.testItems = items;
-        }
-
-        @Override
-        public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_textview, parent, false);
-            ItemViewHolder pvh = new ItemViewHolder(v);
-            return pvh;
-        }
-
-        @Override
-        public void onBindViewHolder(ItemViewHolder productViewHolder, int i) {
-            productViewHolder.mText.setText(testItems.get(i));
-        }
-
-        @Override
-        public int getItemCount() {
-            return testItems.size();
-        }
-
-        class ItemViewHolder extends RecyclerView.ViewHolder {
-            TextView mText;
-
-            public ItemViewHolder(View itemView) {
-                super(itemView);
-                mText = (TextView) itemView.findViewById(R.id.text);
-            }
-        }
     }
 }

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.terry.samples.R;
 import com.terry.samples.fragment.LayoutFragment;
+import com.terry.samples.fragment.SQLiteFragment;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,8 +82,8 @@ public class MainActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
+        if (id == R.id.nav_sqlite) {
+            setContentFragment(new SQLiteFragment(), true);
         } else if (id == R.id.nav_tab) {
             setContentFragment(new LayoutFragment(), true);
         } else if (id == R.id.nav_slideshow) {
