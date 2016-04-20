@@ -34,8 +34,8 @@ public class SampleDBHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     public static synchronized SampleDBHelper getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
+        // Use the application mContext, which will ensure that you
+        // don't accidentally leak an Activity's mContext.
         // See this article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
             sInstance = new SampleDBHelper(context.getApplicationContext());

@@ -11,14 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.terry.samples.R;
-import com.terry.samples.adapter.StringAdapter;
+import com.terry.samples.adapter.BaseRVAdapter;
+import com.terry.samples.adapter.BaseRVAdapterHelper;
 
 import java.util.ArrayList;
 
 public class ScrollingActivity extends AppCompatActivity {
     private ArrayList<String> testItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
-    private StringAdapter mStringAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,13 @@ public class ScrollingActivity extends AppCompatActivity {
             testItems.add(Integer.toString(i));
         }
 
-        mStringAdapter = new StringAdapter(this, testItems);
+        BaseRVAdapter mStringAdapter = new BaseRVAdapter<String, BaseRVAdapterHelper>(
+                this, R.layout.layout_textview, testItems) {
+            @Override
+            protected void convert(BaseRVAdapterHelper holder, String item) {
+                holder.getTextView(R.id.text).setText(item);
+            }
+        };
         mRecyclerView.setAdapter(mStringAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

@@ -13,11 +13,11 @@ import android.widget.EditText;
 
 import com.terry.samples.R;
 import com.terry.samples.activity.MainActivity;
-import com.terry.samples.adapter.PersonListAdapter;
+import com.terry.samples.adapter.BaseRVAdapter;
+import com.terry.samples.adapter.BaseRVAdapterHelper;
 import com.terry.samples.model.Person;
 import com.terry.samples.utils.SampleDBHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private EditText mInsertPersonView;
 
-    private PersonListAdapter mItemAdapter;
+    private BaseRVAdapter mPersonListAdapter;
     private SampleDBHelper mSampleDBHelper;
 
     @Override
@@ -66,13 +66,20 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setAdapter(List<Person> list) {
-        if (mItemAdapter == null) {
-            mItemAdapter = new PersonListAdapter(getActivity(), new ArrayList<Person>());
-            mRecyclerView.setAdapter(mItemAdapter);
-            mItemAdapter.setOnItemClickListener(new PersonListAdapter.OnItemClickListener() {
+        if (mPersonListAdapter == null) {
+            mPersonListAdapter = new BaseRVAdapter<Person, BaseRVAdapterHelper>(getActivity(),
+                    R.layout.layout_textview, null) {
+
+                @Override
+                protected void convert(BaseRVAdapterHelper holder, Person item) {
+                    holder.getTextView(R.id.text).setText(item.getName());
+                }
+            };
+            mRecyclerView.setAdapter(mPersonListAdapter);
+            mPersonListAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    final Person person = (Person) mItemAdapter.getItemAtPosition(position);
+                    final Person person = (Person) mPersonListAdapter.getItem(position);
                     final EditText editText = new EditText(getActivity());
 
                     new AlertDialog.Builder(getActivity())
@@ -91,10 +98,10 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
                             .setNegativeButton("取消", null).show();
                 }
             });
-            mItemAdapter.setOnItemLongClickListener(new PersonListAdapter.OnItemLongClickListener() {
+            mPersonListAdapter.setOnItemLognClickListener(new BaseRVAdapter.OnItemLongClickListener() {
                 @Override
                 public void onItemLongClick(View view, int position) {
-                    final Person person = (Person) mItemAdapter.getItemAtPosition(position);
+                    final Person person = (Person) mPersonListAdapter.getItem(position);
 
                     new AlertDialog.Builder(getActivity())
                             .setTitle("刪除")
@@ -109,8 +116,7 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
                 }
             });
         }
-        mItemAdapter.cleanList();
-        mItemAdapter.addAll(list);
+        mPersonListAdapter.replaceAll(list);
     }
 
     @Override
@@ -118,7 +124,8 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.clear:
                 mSampleDBHelper.deleteDatabase();
-                mItemAdapter.cleanList();
+//                mItemAdapter.cleanList();
+                mPersonListAdapter.clear();
                 break;
             case R.id.refresh:
                 setAdapter(mSampleDBHelper.queryAll());
