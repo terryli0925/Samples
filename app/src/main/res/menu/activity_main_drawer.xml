@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_sqlite"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="Sqllite"/>
+            android:title="SQLite"/>
         <item
             android:id="@+id/nav_tab"
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="Tab Layout Test"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_file_explore"
             android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="File explore"/>
         <item
             android:id="@+id/nav_manage"
             android:icon="@android:drawable/ic_menu_manage"
