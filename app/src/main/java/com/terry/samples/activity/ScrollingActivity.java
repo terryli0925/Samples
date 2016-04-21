@@ -61,7 +61,7 @@ public class ScrollingActivity extends AppCompatActivity {
         BaseRVAdapter mStringAdapter = new BaseRVAdapter<String, BaseRVAdapterHelper>(
                 this, R.layout.layout_textview, testItems) {
             @Override
-            protected void convert(BaseRVAdapterHelper holder, String item) {
+            protected void convert(BaseRVAdapterHelper holder, String item, int position) {
                 holder.getTextView(R.id.text).setText(item);
             }
         };

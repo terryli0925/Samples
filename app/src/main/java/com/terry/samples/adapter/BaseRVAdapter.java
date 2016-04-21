@@ -91,7 +91,7 @@ public abstract class BaseRVAdapter<T, H extends BaseRVAdapterHelper> extends
     public void onBindViewHolder(BaseRVAdapterHelper holder, int position) {
         holder.itemView.setTag(position);
         T item = getItem(position);
-        convert((H) holder, item);
+        convert((H) holder, item, position);
     }
 
     /**
@@ -100,7 +100,7 @@ public abstract class BaseRVAdapter<T, H extends BaseRVAdapterHelper> extends
      * @param holder A fully initialized helper.
      * @param item   The item that needs to be displayed.
      */
-    protected abstract void convert(H holder, T item);
+    protected abstract void convert(H holder, T item, int position);
 
     @Override
     public int getItemCount() {

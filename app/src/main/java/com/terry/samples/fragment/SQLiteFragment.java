@@ -71,7 +71,7 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
                     R.layout.layout_textview, null) {
 
                 @Override
-                protected void convert(BaseRVAdapterHelper holder, Person item) {
+                protected void convert(BaseRVAdapterHelper holder, Person item, int position) {
                     holder.getTextView(R.id.text).setText(item.getName());
                 }
             };

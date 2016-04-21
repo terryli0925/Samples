@@ -3,7 +3,6 @@ package com.terry.samples.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -61,11 +60,11 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setCustomView(menuView, lp);
     }
 
-    public void setContentFragment(Fragment fragment, boolean addBackStack){
-        setContentFragment(R.id.content_none, fragment, addBackStack);
+    public void replaceFragment(Fragment fragment, boolean addBackStack){
+        replaceFragment(R.id.content_none, fragment, addBackStack);
     }
 
-    public void setContentFragment(int containerViewId, Fragment fragment, boolean addBackStack){
+    public void replaceFragment(int containerViewId, Fragment fragment, boolean addBackStack){
         if(fragment != null){
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

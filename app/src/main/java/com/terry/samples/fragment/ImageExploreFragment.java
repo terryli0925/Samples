@@ -82,7 +82,7 @@ public class ImageExploreFragment extends Fragment {
                         PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             }
         } else {
-            getImageList();
+            getBucketList();
         }
     }
 
@@ -92,7 +92,7 @@ public class ImageExploreFragment extends Fragment {
             case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getImageList();
+                    getBucketList();
                 } else {
                     getActivity().finish();
                 }
@@ -100,7 +100,7 @@ public class ImageExploreFragment extends Fragment {
         }
     }
 
-    private void getImageList() {
+    private void getBucketList() {
         ArrayList<Bucket> list = new ArrayList<>();
 
         // which image properties are we querying
@@ -124,20 +124,19 @@ public class ImageExploreFragment extends Fragment {
         Cursor cursor = getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, groupBy, null, orderBy);
 
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             String bucketName;
             int photoCount;
             do {
                 bucketName = cursor.getString(cursor.getColumnIndex(
                         MediaStore.Images.Media.BUCKET_DISPLAY_NAME));
                 photoCount = getPhotoCountByBucket(bucketName);
-                //int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-//                Log.i(TAG, bucketName + " : " + photoCount);
                 list.add(new Bucket(bucketName, photoCount));
             } while (cursor.moveToNext());
+            cursor.close();
+
         }
 
-        cursor.close();
         setAdapter(list);
     }
 
@@ -151,13 +150,16 @@ public class ImageExploreFragment extends Fragment {
         // Method Two
         Cursor photoCursor = getActivity().getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null,
-                "bucket_display_name = ?", new String[]{bucketName}, null);
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?", new String[]{bucketName}, null);
 //        Log.i(TAG, "" + photoCursor.getColumnCount());
-        if (photoCursor.getCount() > 0) {
-            return photoCursor.getCount();
+
+        int photoCount = 0;
+        if (photoCursor != null) {
+            photoCount = photoCursor.getCount();
+            photoCursor.close();
         }
-        photoCursor.close();
-        return 0;
+
+        return photoCount;
     }
 
     private void setAdapter(List<Bucket> list) {
@@ -165,7 +167,7 @@ public class ImageExploreFragment extends Fragment {
                 R.layout.adapter_bucket_list_item, null) {
 
             @Override
-            protected void convert(BaseRVAdapterHelper holder, Bucket item) {
+            protected void convert(BaseRVAdapterHelper holder, Bucket item, int position) {
                 holder.getTextView(R.id.name).setText(item.getName());
                 holder.getTextView(R.id.photo_count).setText(String.valueOf(item.getPhotoCount()));
             }
@@ -175,6 +177,8 @@ public class ImageExploreFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 final Bucket bucket = (Bucket) mBucketListAdapter.getItem(position);
+                ((MainActivity) getActivity()).replaceFragment(
+                        ImageListFragment.newInstance(bucket.getName()), true);
             }
         });
 
