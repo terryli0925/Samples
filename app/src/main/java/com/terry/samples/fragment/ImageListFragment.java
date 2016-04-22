@@ -20,6 +20,7 @@ import com.terry.samples.R;
 import com.terry.samples.activity.MainActivity;
 import com.terry.samples.adapter.BaseRVAdapter;
 import com.terry.samples.adapter.BaseRVAdapterHelper;
+import com.terry.samples.adapter.QuickRVAdapter;
 import com.terry.samples.model.Photo;
 import com.terry.samples.utils.LogUtils;
 
@@ -40,7 +41,7 @@ public class ImageListFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     private String mBucketName;
-    private BaseRVAdapter mImageListAdapter;
+    private QuickRVAdapter mImageListAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -113,7 +114,7 @@ public class ImageListFragment extends Fragment {
     }
 
     private void setAdapter(List<Photo> list) {
-        mImageListAdapter = new BaseRVAdapter<Photo, BaseRVAdapterHelper>(getActivity(),
+        mImageListAdapter = new QuickRVAdapter<Photo>(getActivity(),
                 R.layout.adapter_image_list_item, null) {
 
             @Override
