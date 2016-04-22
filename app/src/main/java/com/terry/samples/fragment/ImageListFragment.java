@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -61,6 +64,7 @@ public class ImageListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mBucketName = getArguments().getString(ARG_BUCKET_NAME);
         }
@@ -77,6 +81,7 @@ public class ImageListFragment extends Fragment {
 
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
     }
 
@@ -114,8 +119,7 @@ public class ImageListFragment extends Fragment {
             @Override
             protected void convert(BaseRVAdapterHelper holder, Photo item, int position) {
                 ImageView imageView = holder.getImageView(R.id.photo);
-                imageView.setTag(imageView.getId(), position);
-                Glide.with(getActivity()).load(item.getPath()).override(72, 72)
+                Glide.with(getActivity()).load(item.getPath()).override(200, 200)
                         .into(imageView);
             }
         };
@@ -129,5 +133,16 @@ public class ImageListFragment extends Fragment {
         });
 
         mImageListAdapter.addAll(list);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear(); // Clear menu before inflating new menu
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }

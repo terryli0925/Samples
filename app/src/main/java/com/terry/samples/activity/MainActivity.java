@@ -73,11 +73,11 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_sqlite) {
-            replaceFragment(new SQLiteFragment(), true);
+            replaceFragment(new SQLiteFragment(), false);
         } else if (id == R.id.nav_tab) {
-            replaceFragment(new LayoutFragment(), true);
+            replaceFragment(new LayoutFragment(), false);
         } else if (id == R.id.nav_file_explore) {
-            replaceFragment(new ImageExploreFragment(), true);
+            replaceFragment(new ImageExploreFragment(), false);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
