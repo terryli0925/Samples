@@ -11,6 +11,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Google+ SignIn"
+            android:textSize="20dp"/>
+
         <LinearLayout
             android:id="@+id/google_profile_layout"
             android:layout_width="match_parent"
@@ -59,6 +65,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SignOut"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Google Cloud Message"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/gcm_message"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+
+            <Button
+                android:id="@+id/gcm_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GCM send"/>
         </LinearLayout>
 
     </LinearLayout>

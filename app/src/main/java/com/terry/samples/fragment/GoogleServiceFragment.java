@@ -2,16 +2,17 @@ package com.terry.samples.fragment;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,9 +27,21 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.terry.samples.Config;
 import com.terry.samples.R;
 import com.terry.samples.activity.MainActivity;
 import com.terry.samples.utils.LogUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +54,7 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
 
     private ImageView mProfileImage;
     private TextView mName, mEmail;
+    private EditText mMessage;
 
     //Signing Options
     private GoogleSignInOptions mGso;
@@ -67,6 +81,9 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
 //        signInButton.setScopes(mGso.getScopeArray());
         signInButton.setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
+
+        mMessage = (EditText) view.findViewById(R.id.gcm_message);
+        view.findViewById(R.id.gcm_send).setOnClickListener(this);
 
     }
 
@@ -175,6 +192,12 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
             case R.id.google_sign_out_button:
                 signOut();
                 break;
+            case R.id.gcm_send:
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String token = sharedPreferences.getString(Config.PREF_GCM_REGISTRATION_TOKEN, null);
+                sendGCM(token, mMessage.getText().toString());
+                mMessage.setText("");
+                break;
         }
     }
 
@@ -201,5 +224,65 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
                         // ...
                     }
                 });
+    }
+
+    private void sendGCM(String token, String msg) {
+        if (token == null || msg == null || msg.equals("")) return;
+
+        new AsyncTask<String, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(String... params) {
+                try {
+                    // Create connection to send GCM Message request.
+                    URL url = new URL("https://android.googleapis.com/gcm/send");
+                    URLConnection connection = url.openConnection();
+                    connection.setRequestProperty("Accept-Charset", "UTF-8");
+                    connection.setRequestProperty("Authorization", "key=" + Config.GOOGLE_API_KEY);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    connection.setDoOutput(true);
+
+                    // encode output
+                    JSONObject custom_msg = new JSONObject();
+                    custom_msg.put("message", params[1]);
+                    JSONObject data = new JSONObject();
+                    data.put("to", params[0]); // 這裏放receiver的token
+                    data.put("data", custom_msg);
+                    OutputStream outputStream = connection.getOutputStream();
+                    outputStream.write(data.toString().getBytes("UTF-8"));
+
+                    String resp = readStream(connection.getInputStream());
+                    LogUtils.print(TAG, "response= " + resp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            public String readStream(InputStream in) {
+                BufferedReader reader = null;
+                StringBuilder builder = new StringBuilder();
+                try {
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        builder.append(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return builder.toString();
+            }
+        }.execute(token, msg);
     }
 }
