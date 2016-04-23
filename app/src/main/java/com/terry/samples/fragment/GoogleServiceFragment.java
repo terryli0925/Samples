@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -29,6 +31,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.terry.samples.Config;
 import com.terry.samples.R;
+import com.terry.samples.SamplesApplication;
 import com.terry.samples.activity.MainActivity;
 import com.terry.samples.utils.LogUtils;
 
@@ -54,7 +57,7 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
 
     private ImageView mProfileImage;
     private TextView mName, mEmail;
-    private EditText mMessage;
+    private EditText mMessage, mScreenNmae;
 
     //Signing Options
     private GoogleSignInOptions mGso;
@@ -75,15 +78,16 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
         mProfileImage = (ImageView) view.findViewById(R.id.google_profile_image);
         mName = (TextView) view.findViewById(R.id.google_profile_name);
         mEmail = (TextView) view.findViewById(R.id.google_profile_mail);
-
         SignInButton signInButton = (SignInButton) view.findViewById(R.id.google_sign_in_button);
 //        signInButton.setSize(SignInButton.SIZE_STANDARD);
 //        signInButton.setScopes(mGso.getScopeArray());
+        mMessage = (EditText) view.findViewById(R.id.gcm_message);
+        mScreenNmae = (EditText) view.findViewById(R.id.screen_name);
+
         signInButton.setOnClickListener(this);
         view.findViewById(R.id.google_sign_out_button).setOnClickListener(this);
-
-        mMessage = (EditText) view.findViewById(R.id.gcm_message);
         view.findViewById(R.id.gcm_send).setOnClickListener(this);
+        view.findViewById(R.id.analytics_send).setOnClickListener(this);
 
     }
 
@@ -198,6 +202,10 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
                 sendGCM(token, mMessage.getText().toString());
                 mMessage.setText("");
                 break;
+            case R.id.analytics_send:
+                sendTrackScreenNameToGA(mScreenNmae.getText().toString());
+                mScreenNmae.setText("");
+                break;
         }
     }
 
@@ -284,5 +292,16 @@ public class GoogleServiceFragment extends BaseFragment implements GoogleApiClie
                 return builder.toString();
             }
         }.execute(token, msg);
+    }
+
+    private void sendTrackScreenNameToGA(String name) {
+        if (name == null || name.equals("")) return;
+
+        LogUtils.print(TAG, "Send screen name: " + name);
+        // Obtain the shared Tracker instance.
+        Tracker tracker = ((SamplesApplication) getActivity().getApplication()).getDefaultTracker();
+
+        tracker.setScreenName(name);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 }

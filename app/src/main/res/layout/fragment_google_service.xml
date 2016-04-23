@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:focusableInTouchMode="true"
     tools:context="com.terry.samples.fragment.GoogleServiceFragment">
 
     <LinearLayout
@@ -21,7 +22,7 @@
             android:id="@+id/google_profile_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -52,7 +53,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <com.google.android.gms.common.SignInButton
@@ -64,18 +65,21 @@
                 android:id="@+id/google_sign_out_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SignOut"/>
+                android:text="SignOut"
+                android:textAllCaps="false"/>
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Google Cloud Message"
             android:textSize="20dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <EditText
@@ -88,9 +92,36 @@
                 android:id="@+id/gcm_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="GCM send"/>
+                android:text="GCM send"
+                android:textAllCaps="false"/>
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Google Analytics"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/screen_name"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"/>
+
+            <Button
+                android:id="@+id/analytics_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send screen name"
+                android:textAllCaps="false"/>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
