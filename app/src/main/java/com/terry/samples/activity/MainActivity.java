@@ -6,7 +6,11 @@ import android.support.v4.view.GravityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.terry.samples.R;
+import com.terry.samples.fragment.FacebookServiceFragment;
+import com.terry.samples.fragment.GoogleServiceFragment;
 import com.terry.samples.fragment.ImageExploreFragment;
 import com.terry.samples.fragment.LayoutFragment;
 import com.terry.samples.fragment.SQLiteFragment;
@@ -18,6 +22,8 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_main);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -78,8 +84,10 @@ public class MainActivity extends BaseActivity
             replaceFragment(new LayoutFragment(), false);
         } else if (id == R.id.nav_file_explore) {
             replaceFragment(new ImageExploreFragment(), false);
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_google_service) {
+            replaceFragment(new GoogleServiceFragment(), false);
+        } else if (id == R.id.nav_facebook_service) {
+            replaceFragment(new FacebookServiceFragment(), false);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
