@@ -79,6 +79,7 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
             mPersonListAdapter.setOnItemClickListener(new BaseRVAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
+                    position = mRecyclerView.getChildAdapterPosition(view);
                     final Person person = (Person) mPersonListAdapter.getItem(position);
                     final EditText editText = new EditText(getActivity());
 
@@ -101,6 +102,7 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
             mPersonListAdapter.setOnItemLognClickListener(new BaseRVAdapter.OnItemLongClickListener() {
                 @Override
                 public void onItemLongClick(View view, int position) {
+                    position = mRecyclerView.getChildAdapterPosition(view);
                     final Person person = (Person) mPersonListAdapter.getItem(position);
 
                     new AlertDialog.Builder(getActivity())
