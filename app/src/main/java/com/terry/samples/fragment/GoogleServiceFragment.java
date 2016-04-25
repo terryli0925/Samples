@@ -1,21 +1,18 @@
 package com.terry.samples.fragment;
 
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.os.ResultReceiver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +45,7 @@ import com.terry.samples.Config;
 import com.terry.samples.R;
 import com.terry.samples.SamplesApplication;
 import com.terry.samples.activity.MainActivity;
+import com.terry.samples.service.FetchAddressIntentService;
 import com.terry.samples.utils.LogUtils;
 
 import org.json.JSONException;
@@ -62,8 +60,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,6 +104,11 @@ public class GoogleServiceFragment extends BaseFragment implements
      */
     private Location mCurrentLocation;
 
+    /**
+     * Receiver registered with this activity to get the response from FetchAddressIntentService.
+     */
+    private AddressResultReceiver mResultReceiver;
+
     private ImageView mProfileImage;
     private TextView mName, mEmail;
     private EditText mMessage, mScreenName;
@@ -144,10 +145,11 @@ public class GoogleServiceFragment extends BaseFragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mResultReceiver = new AddressResultReceiver(new Handler());
+
         buildGoogleApiClient();
         createLocationRequest();
         buildLocationSettingsRequest();
-        verifyPermission();
     }
 
     private void buildGoogleApiClient() {
@@ -194,7 +196,7 @@ public class GoogleServiceFragment extends BaseFragment implements
                     case LocationSettingsStatusCodes.SUCCESS:
                         // All location settings are satisfied. The client can
                         // initialize location requests here.
-                        startLocationUpdates();
+//                        startLocationUpdates();
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                         // Location settings are not satisfied, but this can be fixed
@@ -219,31 +221,6 @@ public class GoogleServiceFragment extends BaseFragment implements
                 }
             }
         });
-    }
-
-    private void verifyPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    Config.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case Config.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (mGoogleApiClient.isConnected()) {
-                        getLastLocation();
-                    }
-                } else {
-                    getActivity().finish();
-                }
-                break;
-        }
     }
 
     @Override
@@ -287,51 +264,11 @@ public class GoogleServiceFragment extends BaseFragment implements
         }
     }
 
-    private void getLastLocation() {
-        if (mCurrentLocation != null) {
-            LogUtils.print(TAG, String.valueOf(mCurrentLocation.getLatitude()) + "," +
-                    String.valueOf(mCurrentLocation.getLongitude()));
-            getAddressList(mCurrentLocation);
-        }
-    }
-
-    private void getAddressList(Location location) {
-        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-        List<Address> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            ioException.printStackTrace();
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            LogUtils.print(TAG, "Latitude = " + location.getLatitude() + ", Longitude = " +
-                    location.getLongitude());
-            illegalArgumentException.printStackTrace();
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size() == 0) {
-            LogUtils.print(TAG, "No address found");
-        } else {
-            Address address = addresses.get(0);
-//            ArrayList<String> addressFragments = new ArrayList<String>();
-//
-//            for(int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-//                addressFragments.add(address.getAddressLine(i));
-//            }
-//            String city = addresses.get(0).getLocality();
-//            String state = addresses.get(0).getAdminArea();
-//            String country = addresses.get(0).getCountryName();
-//            String postalCode = addresses.get(0).getPostalCode();
-//            String knownName = addresses.get(0).getFeatureName(); // Only if available else return NUL
-            mAddress.setText(address.toString());
-        }
+    protected void startFetchAddress() {
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        intent.putExtra(Config.LOCATION_RECEIVER, mResultReceiver);
+        intent.putExtra(Config.LOCATION_DATA_EXTRA, mCurrentLocation);
+        getActivity().startService(intent);
     }
 
     @Override
@@ -416,7 +353,7 @@ public class GoogleServiceFragment extends BaseFragment implements
         mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         mLastUpdateTime.setText(DateFormat.getTimeInstance().format(new Date()));
-        getLastLocation();
+        startFetchAddress();
 
         startLocationUpdates();
     }
@@ -427,7 +364,7 @@ public class GoogleServiceFragment extends BaseFragment implements
 
         mCurrentLocation = location;
         mLastUpdateTime.setText(DateFormat.getTimeInstance().format(new Date()));
-        getLastLocation();
+        startFetchAddress();
     }
 
     @Override
@@ -563,4 +500,23 @@ public class GoogleServiceFragment extends BaseFragment implements
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
+    /**
+     * Receiver for data sent from FetchAddressIntentService.
+     */
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         * Receives data sent from FetchAddressIntentService and updates the UI.
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            // Display the address string or an error message sent from the intent service.
+            String addressOutput = resultData.getString(Config.LOCATION_RESULT_DATA_KEY);
+            mAddress.setText(addressOutput);
+        }
+    }
 }

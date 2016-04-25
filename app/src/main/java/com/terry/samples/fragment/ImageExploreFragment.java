@@ -1,14 +1,9 @@
 package com.terry.samples.fragment;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.terry.samples.Config;
 import com.terry.samples.R;
 import com.terry.samples.activity.MainActivity;
 import com.terry.samples.adapter.BaseRVAdapter;
@@ -50,57 +44,13 @@ public class ImageExploreFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_explore, container, false);
         initView(view);
-        verifyPermission();
+        getBucketList();
         return view;
     }
 
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    private void verifyPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                // It's use for activity
-//                ActivityCompat.requestPermissions(getActivity(),
-//                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                        PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-                // It's use for fragment
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-            } else {
-                // No explanation needed, we can request the permission.
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
-        } else {
-            getBucketList();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getBucketList();
-                } else {
-                    getActivity().finish();
-                }
-                break;
-        }
     }
 
     private void getBucketList() {

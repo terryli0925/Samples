@@ -1,13 +1,17 @@
 package com.terry.samples.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.view.Menu;
@@ -27,11 +31,19 @@ import com.terry.samples.fragment.SQLiteFragment;
 import com.terry.samples.gcm.RegistrationIntentService;
 import com.terry.samples.utils.LogUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final String[] PERMISSIONS = new String[] {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -44,6 +56,8 @@ public class MainActivity extends BaseActivity
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_main);
+
+        requestPermission();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +73,43 @@ public class MainActivity extends BaseActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void requestPermission() {
+        List<String> permissions = new ArrayList<String>();
+
+        for (int i = 0; i < PERMISSIONS.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, PERMISSIONS[i])
+                    != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(PERMISSIONS[i]);
+            }
+        }
+
+        if (permissions.size() > 0) {
+            // It's use for activity
+            ActivityCompat.requestPermissions(this, permissions.toArray(new String[permissions.size()]),
+                    Config.REQUEST_PERMISSIONS);
+        }
+
+        // It's use for fragment
+//        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                Config.REQUEST_PERMISSIONS);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Config.REQUEST_PERMISSIONS:
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                        finish();
+                    }
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 
     private void initGCM() {
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
