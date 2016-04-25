@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.terry.samples.Config;
 import com.terry.samples.R;
 import com.terry.samples.activity.MainActivity;
 import com.terry.samples.adapter.BaseRVAdapter;
@@ -33,8 +34,6 @@ import java.util.List;
 public class ImageExploreFragment extends Fragment {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-
-    private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
 
     private RecyclerView mRecyclerView;
 
@@ -79,11 +78,11 @@ public class ImageExploreFragment extends Fragment {
 
                 // It's use for fragment
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                        Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             } else {
                 // No explanation needed, we can request the permission.
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                        Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             }
         } else {
             getBucketList();
@@ -93,7 +92,7 @@ public class ImageExploreFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+            case Config.PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getBucketList();

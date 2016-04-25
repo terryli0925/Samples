@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:focusableInTouchMode="true"
+    android:padding="16dp"
     tools:context="com.terry.samples.fragment.GoogleServiceFragment">
 
     <LinearLayout
@@ -122,6 +122,27 @@
                 android:text="Send screen name"
                 android:textAllCaps="false"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Google Location"
+            android:textSize="20dp"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/location_update_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="16dp"/>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

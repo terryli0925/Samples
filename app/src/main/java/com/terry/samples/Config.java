@@ -11,4 +11,8 @@ public class Config {
     public static final String PREF_GCM_REGISTRATION_TOKEN = "pref_gcm_registration_token";
 
     public static final String GOOGLE_API_KEY = "";
+
+    // Permission
+    public static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 100;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101;
 }
