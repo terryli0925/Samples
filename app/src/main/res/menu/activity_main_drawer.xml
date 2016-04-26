@@ -22,19 +22,23 @@
             android:id="@+id/nav_facebook_service"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="Facebook service"/>
+        <item
+            android:id="@+id/nav_service"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="Service"/>
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@android:drawable/ic_menu_info_details"
-                android:title="Share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@android:drawable/ic_menu_info_details"
-                android:title="Send"/>
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@android:drawable/ic_menu_info_details"-->
+                <!--android:title="Share"/>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@android:drawable/ic_menu_info_details"-->
+                <!--android:title="Send"/>-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>

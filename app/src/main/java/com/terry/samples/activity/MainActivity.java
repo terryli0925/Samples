@@ -28,6 +28,7 @@ import com.terry.samples.fragment.GoogleServiceFragment;
 import com.terry.samples.fragment.ImageExploreFragment;
 import com.terry.samples.fragment.LayoutFragment;
 import com.terry.samples.fragment.SQLiteFragment;
+import com.terry.samples.fragment.ServiceFragment;
 import com.terry.samples.gcm.RegistrationIntentService;
 import com.terry.samples.utils.LogUtils;
 
@@ -227,10 +228,8 @@ public class MainActivity extends BaseActivity
             replaceFragment(new GoogleServiceFragment(), false);
         } else if (id == R.id.nav_facebook_service) {
             replaceFragment(new FacebookServiceFragment(), false);
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_service) {
+            replaceFragment(new ServiceFragment(), false);
         }
 
         getDrawerLayout().closeDrawer(GravityCompat.START);
