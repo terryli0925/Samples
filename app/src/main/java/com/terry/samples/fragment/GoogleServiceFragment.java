@@ -152,6 +152,13 @@ public class GoogleServiceFragment extends BaseFragment implements
         buildLocationSettingsRequest();
     }
 
+    @Override
+    protected void setUpActionBar() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setCustomToolbarTitle("GoogleService");
+        activity.setToolbarExpanded(false);
+    }
+
     private void buildGoogleApiClient() {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.

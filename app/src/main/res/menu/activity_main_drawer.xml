@@ -7,9 +7,13 @@
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="SQLite"/>
         <item
-            android:id="@+id/nav_tab"
+            android:id="@+id/nav_toolbar"
             android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Tab Layout Test"/>
+            android:title="Toolbar Test"/>
+        <item
+            android:id="@+id/nav_custom_toolbar"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="Custom Toolbar Test"/>
         <item
             android:id="@+id/nav_file_explore"
             android:icon="@android:drawable/ic_menu_info_details"

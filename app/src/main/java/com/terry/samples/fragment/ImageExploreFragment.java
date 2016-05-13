@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by terry on 2016/4/21.
  */
-public class ImageExploreFragment extends Fragment {
+public class ImageExploreFragment extends BaseFragment {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -48,9 +48,17 @@ public class ImageExploreFragment extends Fragment {
         return view;
     }
 
+    @Override
+    protected void setUpActionBar() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setCustomToolbarTitle("ImageExplore");
+        activity.setToolbarExpanded(false);
+    }
+
     private void initView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setNestedScrollingEnabled(false);
     }
 
     private void getBucketList() {

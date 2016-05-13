@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Created by terry on 2016/4/19.
  */
-public class SQLiteFragment extends Fragment implements View.OnClickListener {
+public class SQLiteFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -63,6 +63,13 @@ public class SQLiteFragment extends Fragment implements View.OnClickListener {
         mSampleDBHelper = SampleDBHelper.getInstance(getActivity());
 
         setAdapter(mSampleDBHelper.queryAll());
+    }
+
+    @Override
+    protected void setUpActionBar() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setCustomToolbarTitle("SQLiteTest");
+        activity.setToolbarExpanded(false);
     }
 
     private void setAdapter(List<Person> list) {

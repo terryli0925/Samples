@@ -54,6 +54,13 @@ public class FacebookServiceFragment extends BaseFragment implements View.OnClic
         mCallbackManager = CallbackManager.Factory.create();
     }
 
+    @Override
+    protected void setUpActionBar() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setCustomToolbarTitle("FacebookService");
+        activity.setToolbarExpanded(false);
+    }
+
     private void fetchUserInfo(AccessToken accessToken) {
         if (accessToken != null) {
             GraphRequest request = GraphRequest.newMeRequest(accessToken,

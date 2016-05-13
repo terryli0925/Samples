@@ -37,6 +37,13 @@ public class ServiceFragment extends BaseFragment implements View.OnClickListene
         return view;
     }
 
+    @Override
+    protected void setUpActionBar() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setCustomToolbarTitle("ServiceTest");
+        activity.setToolbarExpanded(false);
+    }
+
     private void initView(View view) {
         mStart = (Button) view.findViewById(R.id.start_service);
         mStartP = (Button) view.findViewById(R.id.start_periodic_service);

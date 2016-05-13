@@ -3,6 +3,7 @@ package com.terry.samples.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,30 +26,38 @@ public class BaseActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
     private ProgressDialog mProgressDialog;
 
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        initToolbar();
+        initActionBar();
         initDrawer();
     }
 
-    private void initToolbar() {
+    private void initActionBar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
+            mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         }
     }
 
     private void initDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (mDrawerLayout != null) {
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, mDrawerLayout, getToolbar(), R.string.navigation_drawer_open,
+            mToggle = new ActionBarDrawerToggle(
+                    this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open,
                     R.string.navigation_drawer_close);
-            mDrawerLayout.addDrawerListener(toggle);
-            toggle.syncState();
+            mDrawerLayout.addDrawerListener(mToggle);
+            mToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            mToggle.syncState();
         }
     }
 
@@ -112,5 +121,9 @@ public class BaseActivity extends AppCompatActivity {
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
+    }
+
+    public ActionBarDrawerToggle getDrawerToggle() {
+        return mToggle;
     }
 }
