@@ -21,6 +21,7 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,6 +59,7 @@ public class MainActivity extends BaseActivity
 
     private AppBarLayout mAppBarLayout;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private ViewGroup mCollapsedLayout;
     private TextView mToolbarCollapsedTitle;
     private ImageView mCollapsedImage;
 
@@ -77,9 +79,9 @@ public class MainActivity extends BaseActivity
 
         mAppBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapsedLayout = (ViewGroup) findViewById(R.id.collapsed_layout);
         mCollapsedImage = (ImageView) findViewById(R.id.collapsed_image);
         mToolbarCollapsedTitle = (TextView) findViewById(R.id.toolbar_collapsed_title);
-        setCustomToolbarTitle(getString(R.string.app_name));
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -155,6 +157,13 @@ public class MainActivity extends BaseActivity
 
     public void setToolbarExpanded(boolean expanded) {
         mAppBarLayout.setExpanded(expanded, false);
+        if (expanded) {
+            mCollapsedImage.setVisibility(View.VISIBLE);
+            mCollapsedLayout.setVisibility(View.VISIBLE);
+        } else {
+            mCollapsedImage.setVisibility(View.GONE);
+            mCollapsedLayout.setVisibility(View.GONE);
+        }
     }
 
     public void setCollapsedImage(int resId) {
