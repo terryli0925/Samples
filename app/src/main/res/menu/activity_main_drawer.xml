@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <!-- Must add group id -->
+    <group
+        android:id="@+id/group_top"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_sqlite"
             android:icon="@android:drawable/ic_menu_info_details"
             android:title="SQLite"/>
-        <item
-            android:id="@+id/nav_toolbar"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Toolbar Test"/>
-        <item
-            android:id="@+id/nav_custom_toolbar"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Custom Toolbar Test"/>
-        <item
-            android:id="@+id/nav_file_explore"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="File explore"/>
-        <item
-            android:id="@+id/nav_google_service"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Google service"/>
-        <item
-            android:id="@+id/nav_facebook_service"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Facebook service"/>
-        <item
-            android:id="@+id/nav_service"
-            android:icon="@android:drawable/ic_menu_info_details"
-            android:title="Service"/>
+        <item android:title="AppBar">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_toolbar"
+                        android:icon="@android:drawable/ic_menu_info_details"
+                        android:title="Toolbar Test"/>
+                    <item
+                        android:id="@+id/nav_custom_toolbar"
+                        android:icon="@android:drawable/ic_menu_info_details"
+                        android:title="Custom Toolbar Test"/>
+                </group>
+            </menu>
+        </item>
+        <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_file_explore"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="File explore"/>
+            <item
+                android:id="@+id/nav_google_service"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Google service"/>
+            <item
+                android:id="@+id/nav_facebook_service"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Facebook service"/>
+            <item
+                android:id="@+id/nav_service"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Service"/>
+        </group>
     </group>
 
     <!--<item android:title="Communicate">-->
@@ -44,5 +55,4 @@
                 <!--android:title="Send"/>-->
         <!--</menu>-->
     <!--</item>-->
-
 </menu>
