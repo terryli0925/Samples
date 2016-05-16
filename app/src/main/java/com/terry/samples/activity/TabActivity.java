@@ -135,7 +135,7 @@ public class TabActivity extends AppCompatActivity implements TabLayout.OnTabSel
             View view = inflater.inflate(
                     R.layout.layout_scrollview, container, false);
             TextView textView = (TextView) view.findViewById(R.id.text);
-            textView.setText(mId+"\n"+getText(R.string.large_text));
+            textView.setText(mId + "\n" + getText(R.string.large_text));
             return view;
         }
     }
