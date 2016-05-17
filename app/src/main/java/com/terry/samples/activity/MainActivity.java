@@ -31,6 +31,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.terry.samples.Config;
 import com.terry.samples.R;
+import com.terry.samples.fragment.AnimationFragment;
 import com.terry.samples.fragment.FacebookServiceFragment;
 import com.terry.samples.fragment.GoogleServiceFragment;
 import com.terry.samples.fragment.ImageExploreFragment;
@@ -269,6 +270,8 @@ public class MainActivity extends BaseActivity
             replaceFragment(new FacebookServiceFragment(), false);
         } else if (id == R.id.nav_service) {
             replaceFragment(new ServiceFragment(), false);
+        } else if (id == R.id.nav_animation) {
+            replaceFragment(new AnimationFragment(), false);
         }
 
         getDrawerLayout().closeDrawer(GravityCompat.START);
